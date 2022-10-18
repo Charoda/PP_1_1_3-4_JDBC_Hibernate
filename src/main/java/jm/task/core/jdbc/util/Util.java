@@ -28,4 +28,14 @@ public class Util {
     public static Connection getConnection() {
         return connection;
     }
+
+    public static void closeConnection() {
+        try {
+            connection.close();
+            boolean bool = connection.isClosed();
+            System.out.println(bool ? "Connection is closed" : "Connection is not closed");
+        } catch (SQLException e) {
+            System.out.println("Возникла проблема закрытия соединения с БД");
+        }
+    }
 }

@@ -47,8 +47,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
 
     public void createUsersTable() {
-        try {
-            preparedStatement = connection.prepareStatement(CREATE);
+        try( PreparedStatement preparedStatement = connection.prepareStatement(CREATE)) {
             preparedStatement.executeUpdate();
             System.out.println("Table was created");
         }catch (SQLSyntaxErrorException e){
@@ -59,8 +58,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        try {
-            preparedStatement = connection.prepareStatement(DROP);
+        try(PreparedStatement preparedStatement = connection.prepareStatement(DROP)) {
             preparedStatement.executeUpdate();
             System.out.println("Table was droped");
         } catch (SQLException throwables) {
@@ -69,8 +67,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try {
-            preparedStatement = connection.prepareStatement(INSERT_INTO);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_INTO)) {
             preparedStatement.setString(1,name);
             preparedStatement.setString(2,lastName);
             preparedStatement.setByte(3,age);
@@ -81,8 +78,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
-        try {
-            preparedStatement = connection.prepareStatement(DELETE);
+        try(PreparedStatement preparedStatement = connection.prepareStatement(DELETE);) {
             preparedStatement.setInt(1, (int) id);
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
@@ -92,8 +88,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        try {
-            preparedStatement = connection.prepareStatement(SELECT);
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SELECT)){
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 User user = new User(resultSet.getString("firstName"),resultSet.getString("lastName"), (byte) resultSet.getInt("age"));
@@ -107,8 +102,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        try {
-            preparedStatement = connection.prepareStatement(CLEAN_TABLE);
+        try(PreparedStatement preparedStatement = connection.prepareStatement(CLEAN_TABLE)) {
             preparedStatement.executeUpdate();
             System.out.println("Table User is cleaned");
         } catch (SQLException throwables) {
